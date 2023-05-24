@@ -38,4 +38,19 @@ public class AlunosController : ControllerBase
             return Ok(alunos);
         }
     }
+
+    [HttpGet("{id:int}", Name = "GetAluno")]
+    public async Task<ActionResult<Aluno>> GetAluno(int id)
+    {
+        var aluno = await _alunoService.GetAluno(id);
+
+        if (aluno == null)
+        {
+            return NotFound($"Não existe aluno com o id = {id}");
+        }
+        else
+        {
+            return Ok(aluno);
+        }
+    }
 }
