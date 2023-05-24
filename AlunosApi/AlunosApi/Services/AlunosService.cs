@@ -25,7 +25,7 @@ public class AlunosService : IAlunoService
         }
     }
 
-    public async Task<IEnumerable<Aluno>> GetAlunoByNome(string nome)
+    public async Task<IEnumerable<Aluno>> GetAlunoByName(string nome)
     {
         IEnumerable<Aluno> alunos;
 
