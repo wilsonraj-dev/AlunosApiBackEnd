@@ -53,4 +53,11 @@ public class AlunosController : ControllerBase
             return Ok(aluno);
         }
     }
+
+    [HttpPost]
+    public async Task<ActionResult> Create(Aluno aluno)
+    {
+        await _alunoService.CreateAluno(aluno);
+        return CreatedAtRoute(nameof(GetAluno), new { id = aluno.Id }, aluno);
+    }
 }
