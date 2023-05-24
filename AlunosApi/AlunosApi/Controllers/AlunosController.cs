@@ -53,4 +53,41 @@ public class AlunosController : ControllerBase
             return Ok(aluno);
         }
     }
+
+    [HttpPost]
+    public async Task<ActionResult> Create(Aluno aluno)
+    {
+        await _alunoService.CreateAluno(aluno);
+        return CreatedAtRoute(nameof(GetAluno), new { id = aluno.Id }, aluno);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Update(int id, [FromBody] Aluno aluno)
+    {
+        if (aluno.Id == id)
+        {
+            await _alunoService.UpdateAluno(aluno);
+            return Ok($"Aluno com o Id = {id} atualizado com sucesso");
+        }
+        else
+        {
+            return BadRequest("Dados inconsistentes");
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var aluno = await _alunoService.GetAluno(id);
+
+        if (aluno != null)
+        {
+            await _alunoService.DeleteAluno(aluno);
+            return Ok($"Aluno com o id = {id} deletado com sucesso");
+        }
+        else
+        {
+            return NotFound($"Aluno com id = {id} não encontrado");
+        }
+    }
 }
