@@ -1,4 +1,5 @@
 using AlunosApi.Context;
+using AlunosApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddSwaggerGen();
 var sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
                  options.UseSqlServer(sqlConnection));
+
+builder.Services.AddScoped<IAlunoService, AlunosService>();
 
 var app = builder.Build();
 
