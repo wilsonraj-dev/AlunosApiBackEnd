@@ -60,4 +60,18 @@ public class AlunosController : ControllerBase
         await _alunoService.CreateAluno(aluno);
         return CreatedAtRoute(nameof(GetAluno), new { id = aluno.Id }, aluno);
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Update(int id, [FromBody] Aluno aluno)
+    {
+        if (aluno.Id == id)
+        {
+            await _alunoService.UpdateAluno(aluno);
+            return Ok($"Aluno com o Id = {id} atualizado com sucesso");
+        }
+        else
+        {
+            return BadRequest("Dados inconsistentes");
+        }
+    }
 }
