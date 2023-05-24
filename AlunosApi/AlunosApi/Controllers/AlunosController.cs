@@ -74,4 +74,20 @@ public class AlunosController : ControllerBase
             return BadRequest("Dados inconsistentes");
         }
     }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var aluno = await _alunoService.GetAluno(id);
+
+        if (aluno != null)
+        {
+            await _alunoService.DeleteAluno(aluno);
+            return Ok($"Aluno com o id = {id} deletado com sucesso");
+        }
+        else
+        {
+            return NotFound($"Aluno com id = {id} não encontrado");
+        }
+    }
 }
