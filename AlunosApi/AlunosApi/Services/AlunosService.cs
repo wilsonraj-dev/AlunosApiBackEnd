@@ -1,36 +1,67 @@
-﻿using AlunosApi.Models;
+﻿using AlunosApi.Context;
+using AlunosApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AlunosApi.Services;
 
 public class AlunosService : IAlunoService
 {
-    public Task<IEnumerable<Aluno>> GetAlunos()
+    private readonly AppDbContext _context;
+
+    public AlunosService(AppDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
 
-    public Task<Aluno> GetAluno(int id)
+    public async Task<IEnumerable<Aluno>> GetAlunos()
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _context.Alunos.ToListAsync();
+        }
+        catch
+        {
+            throw;
+        }
     }
 
-    public Task<IEnumerable<Aluno>> GetAlunoByNome(string nome)
+    public async Task<IEnumerable<Aluno>> GetAlunoByNome(string nome)
     {
-        throw new NotImplementedException();
+        IEnumerable<Aluno> alunos;
+
+        if (!string.IsNullOrEmpty(nome))
+        {
+            alunos = await _context.Alunos.Where(x => x.Nome.Contains(nome)).ToListAsync();
+        }
+        else
+        {
+            alunos = await GetAlunos();
+        }
+
+        return alunos;
     }
 
-    public Task CreateAluno(Aluno aluno)
+    public async Task<Aluno> GetAluno(int id)
     {
-        throw new NotImplementedException();
+        var aluno = await _context.Alunos.FindAsync(id);
+        return aluno ?? throw new ArgumentNullException("Informe um valor válido");
     }
 
-    public Task UpdateAluno(Aluno aluno)
+    public async Task CreateAluno(Aluno aluno)
     {
-        throw new NotImplementedException();
+        _context.Alunos.Add(aluno);
+        await _context.SaveChangesAsync();
     }
 
-    public Task DeleteAluno(Aluno aluno)
+    public async Task UpdateAluno(Aluno aluno)
     {
-        throw new NotImplementedException();
+        _context.Entry(aluno).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAluno(Aluno aluno)
+    {
+        _context.Alunos.Remove(aluno);
+        await _context.SaveChangesAsync();
     }
 }
