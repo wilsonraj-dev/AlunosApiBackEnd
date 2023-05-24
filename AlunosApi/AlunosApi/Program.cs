@@ -30,6 +30,13 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseCors(op =>
+{
+    op.WithOrigins("https://localhost:7195");
+    op.AllowAnyMethod();
+    op.AllowAnyHeader();
+});
+
 app.MapControllers();
 
 app.Run();
